@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  app:
+    build: .
+    container_name: spring-boot-app
+    ports:
+      - "8080:8080"
+    environment:
+      DATASOURCE_URL: mongodb://root:example@mongodb:27017/mydatabase?authSource=admin
+      DATASOURCE_USERNAME: root
+      DATASOURCE_PASSWORD: example
+      MAX_FILE_SIZE: 10MB
+      MAX_REQUEST_SIZE: 15MB
+    depends_on:
+      - mongodb
